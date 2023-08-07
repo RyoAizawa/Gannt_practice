@@ -1,235 +1,275 @@
 <!DOCTYPE HTML>
 <html>
-	<head>
-		<!-- タイトル -->
-	    <title>ガントチャート</title>
-	    <!-- エンコード -->
-	    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	    <!-- CSS -->
-	    <link href="css/gannt_practice.css" rel="styleSheet">
-	    <!-- JAVASCRIPT -->
-	    <script src="javascript/lib/jquery-3.6.1.min.js"></script>
-	    <script src="javascript/gannt_practice.js"></script>
-	</head>
-	
-	<body>
-		
-		<!-- ヘッダー -->
-		<header>
-			<!-- インデント変更ボタンエリア -->
-			<span id="indentDiv">
-				<button id="indent_left">←</button>
-				<button id="indent_right">→</button>
-			</span>
-		</header>
-		
-		<!-- ガントチャート -->
-		<main>
-			<!-- テーブルヘッダー ---------------------------------------------------------------------->
-			<table class="column_header column_table">
-				<thead>
-					<tr>
-						<!-- 入力列 -->
-						<th rowspan="3" class="fixed">No</th>
-						<th rowspan="3" class="fixed">作業名</th>
-						<th rowspan="3">担当者</th>
-						<th rowspan="3">進捗率</th>
-						<th rowspan="3">状況</th>
-						<th colspan="3">予定</th>
-						<th colspan="3">実績</th>
-						<th rowspan="3">先行</th>
-						<!-- 日付列 -->
-						<th colspan="11">2023/2</th>
-					</tr>
-					<tr>
-						<!-- 入力列 - 結合対象セル(CSS設定の兼ね合いで非表示セルを配置) -->
-						<th class="none"></th>
-						<th class="none"></th>
-						<th class="none"></th>
-						<th class="none"></th>
-						<th class="none"></th>
-						<!-- 入力列 - 2行目 -->
-						<th rowspan="2">開始日</th>
-						<th rowspan="2">終了日</th>
-						<th rowspan="2">日数</th>
-						<th rowspan="2">開始日</th>
-						<th rowspan="2">終了日</th>
-						<th rowspan="2">日数</th>
-						<th class="none"></th>
-						<!-- 日付列 -->
-						<th id="2023-02-20" class="col_day">20</th>
-						<th id="2023-02-21" class="col_day">21</th>
-						<th id="2023-02-22" class="col_day">22</th>
-						<th id="2023-02-23" class="col_day">23</th>
-						<th id="2023-02-24" class="col_day">24</th>
-						<th id="2023-02-25" class="col_day">25</th>
-						<th id="2023-02-26" class="col_day">26</th>
-						<th id="2023-02-27" class="col_day">27</th>
-						<th id="2023-02-28" class="col_day">28</th>
-						<th id="2023-02-29" class="col_day">29</th>
-						<th id="2023-02-30" class="col_day">30</th>
-					</tr>
-					<tr>
-						<!-- 入力列 - 結合対象セル(CSS設定の兼ね合いで非表示セルを配置) -->
-						<th class="none"></th>
-						<th class="none"></th>
-						<th class="none"></th>
-						<th class="none"></th>
-						<th class="none"></th>
-						<th class="none"></th>
-						<th class="none"></th>
-						<th class="none"></th>
-						<th class="none"></th>
-						<th class="none"></th>
-						<th class="none"></th>
-						<th class="none"></th>
-						<!-- 日付列 -->
-						<th>月</th>
-						<th>火</th>
-						<th>水</th>
-						<th>木</th>
-						<th>金</th>
-						<th>土</th>
-						<th>日</th>
-						<th>月</th>
-						<th>火</th>
-						<th>水</th>
-						<th>木</th>
-					</tr>
-				</thead>
-			</table>
-			
-			<!-- テーブルボディ ---------------------------------------------------------------------->
-			<table class="column_body column_table">
-				<tbody id="column_table_body">
-					<tr>
-						<!-- 入力列 -->
-						<td class="fixed">1</td>
-						<td class="fixed task_title" >ユーザー一覧画面作成</td>
-						<td>Aさん</td>
-						<td>
-							<input type="range" step="10" value="0" id="prog_1" class="prog" min="0" max="100">
-						</td>
-						<td>進行中</td>
-						<td>
-							<input type="date" id="planSt_1" class="planSt dateInpt">
-						</td>
-						<td>
-							<input type="date" id="planEd_1" class="planEd dateInpt">
-						</td>
-						<td id="planDif_1"></td>
-						<td>
-							<input type="date" id="actSt_1" class="actSt dateInpt">
-						</td>
-						<td>
-							<input type="date" id="actEd_1" class="actEd dateInpt">
-						</td>
-						<td id="actDif_1"></td>
-						<td></td>
-						<!-- 日付列 -->
-						<td class="col_day">
-							<div id="planBar_1" class="planBar bar">
-								<div id="progBar_1" class="progBar"></div>
-							</div>
-							<div id="actBar_1" class="actBar bar"></div>
-						</td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-					</tr>
-					<tr>
-						<!-- 入力列 -->
-						<td class="fixed">2</td>
-						<td class="fixed task_title">ユーザー登録画面作成</td>
-						<td>Bさん</td>
-						<td>
-							<input type="range" step="10" value="0" id="prog_2" class="prog" min="0" max="100">
-						</td>
-						<td>進行中</td>
-						<td>
-							<input type="date" id="planSt_2" class="planSt dateInpt">
-						</td>
-						<td>
-							<input type="date" id="planEd_2" class="planEd dateInpt">
-						</td>
-						<td id="planDif_2"></td>
-						<td>
-							<input type="date" id="actSt_2" class="actSt dateInpt">
-						</td>
-						<td>
-							<input type="date" id="actEd_2" class="actEd dateInpt">
-						</td>
-						<td id="actDif_2"></td>
-						<td></td>
-						<!-- 日付列 -->
-						<td class="col_day">
-							<div id="planBar_2" class="planBar bar">
-								<div id="progBar_2" class="progBar"></div>
-							</div>
-							<div id="actBar_2" class="actBar bar"></div>
-						</td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-					</tr>
-					<tr>
-						<!-- 入力列 -->
-						<td class="fixed">3</td>
-						<td class="fixed task_title">ユーザー削除画面作成</td>
-						<td>Cさん</td>
-						<td>
-							<input type="range" step="10" value="0" id="prog_3" class="prog" min="0" max="100">
-						</td>
-						<td>進行中</td>
-						<td>
-							<input type="date" id="planSt_3" class="planSt dateInpt">
-						</td>
-						<td>
-							<input type="date" id="planEd_3" class="planEd dateInpt">
-						</td>
-						<td id="planDif_3"></td>
-						<td>
-							<input type="date" id="actSt_3" class="actSt dateInpt">
-						</td>
-						<td>
-							<input type="date" id="actEd_3" class="actEd dateInpt">
-						</td>
-						<td id="actDif_3"></td>
-						<td></td>
-						<!-- 日付列 -->
-						<td class="col_day">
-							<div id="planBar_3" class="planBar bar">
-								<div id="progBar_3" class="progBar"></div>
-							</div>
-							<div id="actBar_3" class="actBar bar"></div>
-						</td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-						<td class="col_day"></td>
-					</tr>
-				</tbody>
-			</table>
-		</main>
-	</body>
+    <head>
+        <!-- タイトル -->
+        <title>ガントチャート</title>
+        <!-- エンコード -->
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <!-- CSS -->
+        <link href="css/gannt_practice.css" rel="styleSheet">
+        <link href="css/lib/jquery-ui.min.css" rel="stylesheet">
+        <!-- JAVASCRIPT -->
+        <script src="javascript/lib/jquery-3.6.1.min.js"></script>
+        <script src="javascript/lib/jquery-ui.min.js"></script>
+        <script src="javascript/gannt_practice.js"></script>
+    </head>
+
+    <body>
+
+        <!-- ヘッダー -->
+        <header>
+            <!-- インデント変更ボタンエリア -->
+            <span id="indentDiv">
+                <button id="indent_left">←</button>
+                <button id="indent_right">→</button>
+            </span>
+        </header>
+
+        <!-- ガントチャート -->
+        <main>
+            <!-- テーブルヘッダー ---------------------------------------------------------------------->
+            <table class="column_header column_table">
+                <thead>
+                    <tr>
+                        <!-- 入力列 -->
+                        <th rowspan="3" class="fixed">No</th>
+                        <th rowspan="3" class="fixed">作業名</th>
+                        <th rowspan="3">担当者</th>
+                        <th rowspan="3">進捗率</th>
+                        <th rowspan="3">状況</th>
+                        <th colspan="3">予定</th>
+                        <th colspan="3">実績</th>
+                        <th rowspan="3">先行</th>
+                        <!-- 日付列 -->
+                        <th colspan="11">2023/2</th>
+                    </tr>
+                    <tr>
+                        <!-- 入力列 - 結合対象セル(CSS設定の兼ね合いで非表示セルを配置) -->
+                        <th class="none"></th>
+                        <th class="none"></th>
+                        <th class="none"></th>
+                        <th class="none"></th>
+                        <th class="none"></th>
+                        <!-- 入力列 - 2行目 -->
+                        <th rowspan="2">開始日</th>
+                        <th rowspan="2">終了日</th>
+                        <th rowspan="2">日数</th>
+                        <th rowspan="2">開始日</th>
+                        <th rowspan="2">終了日</th>
+                        <th rowspan="2">日数</th>
+                        <th class="none"></th>
+                        <!-- 日付列 -->
+                        <th id="2023-02-20" class="col_day">20</th>
+                        <th id="2023-02-21" class="col_day">21</th>
+                        <th id="2023-02-22" class="col_day">22</th>
+                        <th id="2023-02-23" class="col_day">23</th>
+                        <th id="2023-02-24" class="col_day">24</th>
+                        <th id="2023-02-25" class="col_day">25</th>
+                        <th id="2023-02-26" class="col_day">26</th>
+                        <th id="2023-02-27" class="col_day">27</th>
+                        <th id="2023-02-28" class="col_day">28</th>
+                        <th id="2023-02-29" class="col_day">29</th>
+                        <th id="2023-02-30" class="col_day">30</th>
+                    </tr>
+                    <tr>
+                        <!-- 入力列 - 結合対象セル(CSS設定の兼ね合いで非表示セルを配置) -->
+                        <th class="none"></th>
+                        <th class="none"></th>
+                        <th class="none"></th>
+                        <th class="none"></th>
+                        <th class="none"></th>
+                        <th class="none"></th>
+                        <th class="none"></th>
+                        <th class="none"></th>
+                        <th class="none"></th>
+                        <th class="none"></th>
+                        <th class="none"></th>
+                        <th class="none"></th>
+                        <!-- 日付列 -->
+                        <th>月</th>
+                        <th>火</th>
+                        <th>水</th>
+                        <th>木</th>
+                        <th>金</th>
+                        <th>土</th>
+                        <th>日</th>
+                        <th>月</th>
+                        <th>火</th>
+                        <th>水</th>
+                        <th>木</th>
+                    </tr>
+                </thead>
+            </table>
+
+            <!-- テーブルボディ ---------------------------------------------------------------------->
+            <table class="column_body column_table">
+                <tbody id="column_table_body" class="ui-sortable">
+                    <tr class="one">
+                        <!-- 入力列 -->
+                        <td class="fixed">1</td>
+                        <td class="fixed task_title">ユーザー一覧画面作成</td>
+                        <td>Aさん</td>
+                        <td>
+                            <input type="range" step="10" value="0" id="prog_1" class="prog" min="0" max="100">
+                        </td>
+                        <td>進行中</td>
+                        <td>
+                            <input type="date" id="planSt_1" class="planSt dateInpt">
+                        </td>
+                        <td>
+                            <input type="date" id="planEd_1" class="planEd dateInpt">
+                        </td>
+                        <td id="planDif_1"></td>
+                        <td>
+                            <input type="date" id="actSt_1" class="actSt dateInpt">
+                        </td>
+                        <td>
+                            <input type="date" id="actEd_1" class="actEd dateInpt">
+                        </td>
+                        <td id="actDif_1"></td>
+                        <td></td>
+                        <!-- 日付列 -->
+                        <td class="col_day">
+                            <div id="planBar_1" class="planBar bar">
+                                <div id="progBar_1" class="progBar"></div>
+                            </div>
+                            <div id="actBar_1" class="actBar bar"></div>
+                        </td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                    </tr>
+                    <tr class="two">
+                        <!-- 入力列 -->
+                        <td class="fixed">2</td>
+                        <td class="fixed task_title">ユーザー登録画面作成</td>
+                        <td>Bさん</td>
+                        <td>
+                            <input type="range" step="10" value="0" id="prog_2" class="prog" min="0" max="100">
+                        </td>
+                        <td>進行中</td>
+                        <td>
+                            <input type="date" id="planSt_2" class="planSt dateInpt">
+                        </td>
+                        <td>
+                            <input type="date" id="planEd_2" class="planEd dateInpt">
+                        </td>
+                        <td id="planDif_2"></td>
+                        <td>
+                            <input type="date" id="actSt_2" class="actSt dateInpt">
+                        </td>
+                        <td>
+                            <input type="date" id="actEd_2" class="actEd dateInpt">
+                        </td>
+                        <td id="actDif_2"></td>
+                        <td></td>
+                        <!-- 日付列 -->
+                        <td class="col_day">
+                            <div id="planBar_2" class="planBar bar">
+                                <div id="progBar_2" class="progBar"></div>
+                            </div>
+                            <div id="actBar_2" class="actBar bar"></div>
+                        </td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                    </tr>
+                    <tr class="three">
+                        <!-- 入力列 -->
+                        <td class="fixed">3</td>
+                        <td class="fixed task_title">ユーザー削除画面作成</td>
+                        <td>Cさん</td>
+                        <td>
+                            <input type="range" step="10" value="0" id="prog_3" class="prog" min="0" max="100">
+                        </td>
+                        <td>進行中</td>
+                        <td>
+                            <input type="date" id="planSt_3" class="planSt dateInpt">
+                        </td>
+                        <td>
+                            <input type="date" id="planEd_3" class="planEd dateInpt">
+                        </td>
+                        <td id="planDif_3"></td>
+                        <td>
+                            <input type="date" id="actSt_3" class="actSt dateInpt">
+                        </td>
+                        <td>
+                            <input type="date" id="actEd_3" class="actEd dateInpt">
+                        </td>
+                        <td id="actDif_3"></td>
+                        <td></td>
+                        <!-- 日付列 -->
+                        <td class="col_day">
+                            <div id="planBar_3" class="planBar bar">
+                                <div id="progBar_3" class="progBar"></div>
+                            </div>
+                            <div id="actBar_3" class="actBar bar"></div>
+                        </td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                        <td class="col_day"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
+
+        <script>
+            window.onload = () => {
+                changeRows()
+            }
+            $("#column_table_body").on("change", changeRows)
+
+            let selectedRow = []
+            function changeRows() {
+                $("#column_table_body").selectable({
+                    cancel: ".ui-selected"
+                }).sortable({
+                    // 縦方向限定
+                    axis: 'y',
+                    // 現在ドラッグ対象のオブジェクト（今回はテーブル列）
+                    items: "tr",
+                    // 並び替えヘルパーのオブジェクト
+                    helper: function (e, item) {
+                        selectedRow = $("tr.ui-selected").clone();
+                        // 要素移動中、掴んだ要素とその兄弟要素はテーブルから削除する
+                        for (let elem of selectedRow) {
+                            item.data(selectedRow).siblings('.ui-selected').remove();
+                        }
+                        return $("<tr>").append(selectedRow)
+                    },
+                    stop: function (e, item) {
+                        // 移動した先に掴んでいる要素の先頭の要素がitemに入る（1.2を持っていたら1）
+                        item.item.after(selectedRow)
+                        // 1.2を持っていたら「1.1.2」となるので要素を削除する
+                        item.item.remove()
+                        // 選択済みクラスを全て削除
+                        for ( let elem of $(".ui-selected")) {
+                            elem.classList.remove("ui-selected")
+                        }
+                    }
+                })
+            }
+        </script>
+    </body>
 </html>
