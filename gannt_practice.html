@@ -239,6 +239,7 @@
                 changeRows()
                 init()
                 setChangeEventDate()
+                setProgBar()
             }
 
             // テーブルヘッダに今日から10日分の日付けを書き出す
@@ -316,8 +317,9 @@
                                 }
                             }
                         })
-                        // changeイベントの振り直し
+                        // changeイベント、進捗バーのイベントの振り直し
                         setChangeEventDate()
+                        setProgBar()
                     }
                 })
             }
@@ -442,6 +444,19 @@
                 $(`#${process}Dif_${index}`).html(diffDay + 1)
                 return diffDay + 1
             }
+
+            function setProgBar() {
+                $("[id*='prog_']").each((i) => {
+                    $(`#prog_${i + 1}`).on("input", () => {
+                        console.log($(`#prog_${i + 1}`).val())
+                        $(`#progBar_${i + 1}`).css("width", `${$(`#prog_${i + 1}`).val()}%`)
+                    })
+                })
+            }
+
+
+
+
         </script>
     </body>
 </html>
