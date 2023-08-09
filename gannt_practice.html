@@ -238,6 +238,7 @@
             window.onload = () => {
                 changeRows()
                 init()
+                setChangeEventDate()
             }
             // 選択済み行
             let selectedRows = []
@@ -296,6 +297,7 @@
                                 }
                             }
                         }
+                        setChangeEventDate()
                     }
                 })
             }
@@ -327,16 +329,43 @@
                             tableRowsTmp[orgIndex].indentIndex = indentIndexTmp
                             // 比較に扱いやすいデータにするため選択済みクラスは外す
                             tableRowsTmp[orgIndex].classList.remove("ui-selected")
-                            for ( let selected of tableRowsTmp[orgIndex].querySelectorAll(".ui-selected")){
+                            for (let selected of tableRowsTmp[orgIndex].querySelectorAll(".ui-selected")) {
                                 selected.classList.remove("ui-selected")
                             }
                         }
                     }
                 })
             }
-
             $("#indent_left").on("click", () => indent("left"))
             $("#indent_right").on("click", () => indent("right"))
+
+            // カレンダー入力にchangeイベントを付与。
+            function setChangeEventDate() {
+                $("[id*='planSt_']").each(function(i) {
+                    $(`#planSt_${i}`).change(() => { checkDate(event, i, "plan") })
+                })
+                $("[id*='planEd_']").each(function(i) {
+                    $(`#planEd_${i}`).change(() => { checkDate(event, i, "plan") })
+                })
+                $("[id*='actSt_']").each(function(i) {
+                    $(`#actSt_${i}`).change(() => { checkDate(event, i, "act") })
+                })
+                $("[id*='actEd_']").each(function(i) {
+                    $(`#actEd_${i}`).change(() => { checkDate(event, i, "act") })
+                })
+                // 日付けがセットされているか確認し、予定、実績それぞれの開始/終了がセットされていれば差分を計算する
+                function checkDate(event, index, process) {
+                    if ($(`#${process}St_${index}`).val() !== "" && $(`#${process}Ed_${index}`).val() !== "") setDiffDay(process, index)
+                }
+            }
+            // 予定、実績にセットされた日付けの差分を計算
+            function setDiffDay(process, index) {
+                const stDate = new Date($(`#${process}St_${index}`).val());
+                const edDate = new Date($(`#${process}Ed_${index}`).val());
+                const diffTime = edDate.getTime() - stDate.getTime();
+                const diffDay = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                $(`#${process}Dif_${index}`).html(diffDay + 1)
+            }
 
         </script>
     </body>
