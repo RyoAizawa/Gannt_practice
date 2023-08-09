@@ -369,20 +369,26 @@
                 // 日付けをセットした行を取得
                 const stDate = $(`#${process}St_${index}`).val()
                 const edDate = $(`#${process}Ed_${index}`).val()
+                // 終了日は開始日以前を設定できないようにする
+                $(`#${process}Ed_${index}`).attr("min", stDate)
                 //開始、終了の日付けがセットされているか確認
                 if (stDate !== "" && edDate !== "") {
-                    // チャート出力
-                    setChartBar(stDate, edDate, process, index)
                     // 、予定、実績それぞれの開始/終了がセットされていれば差分を計算する
-                    setDiffDay(process, index)
+                    const diffDay = setDiffDay(stDate, edDate, process, index)
+                    // チャート出力
+                    setChartBar(stDate, edDate, diffDay, process, index)
                 }
             }
             // 設定した開始日、終了日の情報をもとにチャートバーを作成
-            function setChartBar(stDate, edDate, process, index) {
+            function setChartBar(stDate, edDate, diffDay, process, index) {
+                // もしも差分日数が0かマイナス値になっていた場合はバーを非表示にして早期return
+                if (diffDay < 1) {
+                    $(`#${process}Bar_${index}`).css("display", "none")
+                    return
+                }
                 // 日付けをセットした行を取得
                 const selectedRow = $(`#${process}St_${index}`).parent().parent()
-                // 終了日は開始日以前を設定できないようにする
-                $(`#${process}Ed_${index}`).attr("min", stDate)
+
                 // 非表示にしたバーを再表示
                 $(`#${process}Bar_${index}`).css("display", "block")
                 // チャートの起点を決める
@@ -390,18 +396,51 @@
                 if (stDate < today) {
                     // 本日以前の日付けを選んだ場合、起点は本日とする
                     selectedDateCol = selectedRow.children(`td[name=${today}]`)
+                } else if (selectedRow.children(`td[name=${stDate}]`).length < 1) {
+                    // テーブルにない日付けを開始日に選択した場合、バーを消して早期return
+                    $(`#${process}Bar_${index}`).css("display", "none")
+                    return
                 }
+
+                // 起点は全ての日付けカラム内の何番目か
+                let startColumnIndex = 0
+                let columnCount = 0
+                selectedRow.children(".col_day").each((i, column) => {
+                    if (column.isEqualNode(selectedDateCol[0])) {
+                        startColumnIndex = i
+                    }
+                    columnCount = i + 1
+                })
+
+                // 差分がバーのチャートバーのカラムサイズとなる
+                let barColumCount = diffDay
+                // 開始日が本日の日付け以前の場合、開始日から本日までの差分を取得
+                if (stDate < today) {
+                    const diffDayForToday = setDiffDay(stDate, today)
+                    barColumCount -= diffDayForToday - 1
+                }
+
+                // 差分が起点以降の空きカラム数を超えたらバーのサイズは空きカラムの領域を超えないようにする
+                if (barColumCount > (columnCount - startColumnIndex)) {
+                    barColumCount = columnCount - startColumnIndex
+                }
+                // 1本分のボーダーサイズを取得
+                const border = (selectedDateCol.outerWidth() - selectedDateCol.innerWidth()) / 2
+                // 要素の幅+ボーダー*カラム数でバーサイズを計算
+                const barSize = ((selectedDateCol.innerWidth() + border) * barColumCount)
+                // 起点と終端のpadding = 1px分を調整しバーの幅を設定
+                $(`#${process}Bar_${index}`).css("width", `${barSize - 2}px`)
                 // 起点の情報を取得出来たらバーを設定した起点に移動
                 if (selectedDateCol.length > 0) selectedDateCol.append($(`#${process}Bar_${index}`))
-                else $(`#${process}Bar_${index}`).css("display", "none")
             }
             // 予定、実績にセットされた日付けの差分を計算
-            function setDiffDay(process, index) {
-                const stDate = new Date($(`#${process}St_${index}`).val());
-                const edDate = new Date($(`#${process}Ed_${index}`).val());
-                const diffTime = edDate.getTime() - stDate.getTime();
-                const diffDay = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            function setDiffDay(stDate, edDate, process, index) {
+                const startDate = new Date(stDate)
+                const endDate = new Date(edDate)
+                const diffTime = endDate.getTime() - startDate.getTime()
+                const diffDay = Math.floor(diffTime / (1000 * 60 * 60 * 24))
                 $(`#${process}Dif_${index}`).html(diffDay + 1)
+                return diffDay + 1
             }
         </script>
     </body>
