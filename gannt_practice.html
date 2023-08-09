@@ -249,19 +249,18 @@
 
             // 変更前のテーブルの状態を保持するための初期化
             function init() {
-                const tableRows = $("#column_table_body").children("tr")
-                for (let i = 0; i < tableRows.length; i++) {
-                    tableRowsTmp[i] = tableRows[i].cloneNode(true);
+                $("#column_table_body").children("tr").each((i, tableRow) => {
+                    tableRowsTmp[i] = tableRow.cloneNode(true);
                     tableRowsTmp[i].indentIndex = 0
                     tableRowsIndex.push(i)
-                }
+                })
             }
 
             // 選択、行入れ替え機能の付与
             function changeRows() {
                 $("#column_table_body").selectable({
                     cancel: ".ui-selected",
-                    selected: function (e, item) {
+                    selected: (e, item) => {
                         selectedRows = $("tr.ui-selected").clone();
                     }
                 }).sortable({
@@ -273,9 +272,7 @@
                     helper: function (e, item) {
                         selectedRows = $("tr.ui-selected").clone();
                         // 要素移動中、掴んだ要素とその兄弟要素はテーブルから削除する
-                        for (let elem of selectedRows) {
-                            item.data(selectedRows).siblings('.ui-selected').remove();
-                        }
+                        item.data(selectedRows).siblings('.ui-selected').remove();
                         return $("<tr>").append(selectedRows)
                     },
                     stop: function (e, item) {
@@ -284,19 +281,18 @@
                         // 1.2を持っていたら「1.1.2」となるので要素を削除する
                         item.item.remove()
                         // 選択済みクラスを全て削除
-                        for (let elem of $(".ui-selected")) {
+                        $(".ui-selected").each((i, elem) => {
                             elem.classList.remove("ui-selected")
-                        }
+                        })
                         // 変更後のインデックスを取得
                         tableRowsIndex = []
-                        const changedRows = $(this).children("tr")
-                        for (let i = 0; i < changedRows.length; i++) {
+                        $(this).children("tr").each((i, changedRow) => {
                             for (let j = 0; j < tableRowsTmp.length; j++) {
-                                if (tableRowsTmp[j].isEqualNode(changedRows[i])) {
+                                if (tableRowsTmp[j].isEqualNode(changedRow)) {
                                     tableRowsIndex.push(j)
                                 }
                             }
-                        }
+                        })
                         setChangeEventDate()
                     }
                 })
@@ -319,10 +315,8 @@
                             }
                             // 表示中のテーブルのタイトルにインデントを付与
                             tableRows[changedIndex].querySelector(".task_title").style.textIndent = `${tableRowsTmp[orgIndex].indentIndex * 12}px`
-
                             // 選択済み行もインデントを付与した状態に更新
                             selectedRows[i] = tableRows[changedIndex]
-
                             // テーブル行の保持データを更新。テーブルからデータを複製しインデントインデックスは前回の値を引き継ぐ
                             const indentIndexTmp = tableRowsTmp[orgIndex].indentIndex
                             tableRowsTmp[orgIndex] = tableRows[changedIndex].cloneNode(true)
@@ -359,6 +353,7 @@
                 $(`#${process}Dif_${index}`).html(diffDay + 1)
             }
 
+            
         </script>
     </body>
 </html>
