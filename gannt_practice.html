@@ -41,7 +41,7 @@
                         <th colspan="3">実績</th>
                         <th rowspan="3">先行</th>
                         <!-- 日付列 -->
-                        <th colspan="11">2023/2</th>
+                        <th id="head_year_month" colspan="11"></th>
                     </tr>
                     <tr>
                         <!-- 入力列 - 結合対象セル(CSS設定の兼ね合いで非表示セルを配置) -->
@@ -59,17 +59,17 @@
                         <th rowspan="2">日数</th>
                         <th class="none"></th>
                         <!-- 日付列 -->
-                        <th id="2023-02-20" class="col_day">20</th>
-                        <th id="2023-02-21" class="col_day">21</th>
-                        <th id="2023-02-22" class="col_day">22</th>
-                        <th id="2023-02-23" class="col_day">23</th>
-                        <th id="2023-02-24" class="col_day">24</th>
-                        <th id="2023-02-25" class="col_day">25</th>
-                        <th id="2023-02-26" class="col_day">26</th>
-                        <th id="2023-02-27" class="col_day">27</th>
-                        <th id="2023-02-28" class="col_day">28</th>
-                        <th id="2023-02-29" class="col_day">29</th>
-                        <th id="2023-02-30" class="col_day">30</th>
+                        <th class="col_day head_dates"></th>
+                        <th class="col_day head_dates"></th>
+                        <th class="col_day head_dates"></th>
+                        <th class="col_day head_dates"></th>
+                        <th class="col_day head_dates"></th>
+                        <th class="col_day head_dates"></th>
+                        <th class="col_day head_dates"></th>
+                        <th class="col_day head_dates"></th>
+                        <th class="col_day head_dates"></th>
+                        <th class="col_day head_dates"></th>
+                        <th class="col_day head_dates"></th>
                     </tr>
                     <tr>
                         <!-- 入力列 - 結合対象セル(CSS設定の兼ね合いで非表示セルを配置) -->
@@ -86,17 +86,17 @@
                         <th class="none"></th>
                         <th class="none"></th>
                         <!-- 日付列 -->
-                        <th>月</th>
-                        <th>火</th>
-                        <th>水</th>
-                        <th>木</th>
-                        <th>金</th>
-                        <th>土</th>
-                        <th>日</th>
-                        <th>月</th>
-                        <th>火</th>
-                        <th>水</th>
-                        <th>木</th>
+                        <th class="head_days"></th>
+                        <th class="head_days"></th>
+                        <th class="head_days"></th>
+                        <th class="head_days"></th>
+                        <th class="head_days"></th>
+                        <th class="head_days"></th>
+                        <th class="head_days"></th>
+                        <th class="head_days"></th>
+                        <th class="head_days"></th>
+                        <th class="head_days"></th>
+                        <th class="head_days"></th>
                     </tr>
                 </thead>
             </table>
@@ -240,6 +240,29 @@
                 init()
                 setChangeEventDate()
             }
+
+            // テーブルヘッダに今日から10日分の日付けを書き出す
+            const weekOfDays = ["日", "月", "火", "水", "木", "金", "土",]
+            const year = new Date().getFullYear()
+            const month = ("00" + (new Date().getMonth() + 1)).slice(-2)
+            const date = new Date().getDate()
+            const day = new Date().getDay()
+            $("#head_year_month").html(`${year}/${month}`)
+            $(".head_dates").each((i, col) => { col.innerHTML = ("00" + (date + i)).slice(-2) })
+            $(".head_days").each((i, col) => {
+                weekOfDay = (day + i) % 7
+                col.innerHTML = weekOfDays[weekOfDay]
+            })
+            // 今日の日付をYYYY-MM-DDで表示
+            const today = `${year}-${month}-${("00" + (date)).slice(-2)}`
+            let lastDay = 0
+            // 各行の予定表列にクラス名で日付を付与する
+            $("#column_table_body").children("tr").each((i, tableRow) => {
+                tableRow.querySelectorAll(".col_day").forEach((col, index) => {
+                    lastDay = `${year}-${month}-${("00" + (date + index)).slice(-2)}`
+                    col.setAttribute("name", lastDay)
+                })
+            })
             // 選択済み行
             let selectedRows = []
             // 変更前テーブルの保持データ
@@ -293,6 +316,7 @@
                                 }
                             }
                         })
+                        // changeイベントの振り直し
                         setChangeEventDate()
                     }
                 })
@@ -335,14 +359,41 @@
 
             // カレンダー入力にchangeイベントを付与。
             function setChangeEventDate() {
-                $("[id*='planSt_']").each((i) => { $(`#planSt_${i}`).change(() => { checkDate(event, i, "plan") }) })
-                $("[id*='planEd_']").each((i) => { $(`#planEd_${i}`).change(() => { checkDate(event, i, "plan") }) })
-                $("[id*='actSt_']").each((i) => { $(`#actSt_${i}`).change(() => { checkDate(event, i, "act") }) })
-                $("[id*='actEd_']").each((i) => { $(`#actEd_${i}`).change(() => { checkDate(event, i, "act") }) })
-                // 日付けがセットされているか確認し、予定、実績それぞれの開始/終了がセットされていれば差分を計算する
-                function checkDate(event, index, process) {
-                    if ($(`#${process}St_${index}`).val() !== "" && $(`#${process}Ed_${index}`).val() !== "") setDiffDay(process, index)
+                $("[id*='planSt_']").each((i) => { $(`#planSt_${i + 1}`).change(() => { checkDate(event, i + 1, "plan") }) })
+                $("[id*='planEd_']").each((i) => { $(`#planEd_${i + 1}`).change(() => { checkDate(event, i + 1, "plan") }) })
+                $("[id*='actSt_']").each((i) => { $(`#actSt_${i + 1}`).change(() => { checkDate(event, i + 1, "act") }) })
+                $("[id*='actEd_']").each((i) => { $(`#actEd_${i + 1}`).change(() => { checkDate(event, i + 1, "act") }) })
+            }
+            // 日付けがセットされた後の挙動
+            function checkDate(event, index, process) {
+                // 日付けをセットした行を取得
+                const stDate = $(`#${process}St_${index}`).val()
+                const edDate = $(`#${process}Ed_${index}`).val()
+                //開始、終了の日付けがセットされているか確認
+                if (stDate !== "" && edDate !== "") {
+                    // チャート出力
+                    setChartBar(stDate, edDate, process, index)
+                    // 、予定、実績それぞれの開始/終了がセットされていれば差分を計算する
+                    setDiffDay(stDate, edDate, process, index)
                 }
+            }
+            // 設定した開始日、終了日の情報をもとにチャートバーを作成
+            function setChartBar(stDate, edDate, process, index) {
+                // 日付けをセットした行を取得
+                const selectedRow = $(`#${process}St_${index}`).parent().parent()
+                // 終了日は開始日以前を設定できないようにする
+                $(`#${process}Ed_${index}`).attr("min", stDate)
+                // 非表示にしたバーを再表示
+                $(`#${process}Bar_${index}`).css("display", "block")
+                // チャートの起点を決める
+                let selectedDateCol = selectedRow.children(`td[name=${stDate}]`)
+                if (stDate < today) {
+                    // 本日以前の日付けを選んだ場合、起点は本日とする
+                    selectedDateCol = selectedRow.children(`td[name=${today}]`)
+                }
+                // 起点の情報を取得出来たらバーを設定した起点に移動
+                if (selectedDateCol.length > 0) selectedDateCol.append($(`#${process}Bar_${index}`))
+                else $(`#${process}Bar_${index}`).css("display", "none")
             }
             // 予定、実績にセットされた日付けの差分を計算
             function setDiffDay(process, index) {
@@ -352,8 +403,6 @@
                 const diffDay = Math.floor(diffTime / (1000 * 60 * 60 * 24));
                 $(`#${process}Dif_${index}`).html(diffDay + 1)
             }
-
-            
         </script>
     </body>
 </html>
