@@ -341,18 +341,10 @@
 
             // カレンダー入力にchangeイベントを付与。
             function setChangeEventDate() {
-                $("[id*='planSt_']").each(function(i) {
-                    $(`#planSt_${i}`).change(() => { checkDate(event, i, "plan") })
-                })
-                $("[id*='planEd_']").each(function(i) {
-                    $(`#planEd_${i}`).change(() => { checkDate(event, i, "plan") })
-                })
-                $("[id*='actSt_']").each(function(i) {
-                    $(`#actSt_${i}`).change(() => { checkDate(event, i, "act") })
-                })
-                $("[id*='actEd_']").each(function(i) {
-                    $(`#actEd_${i}`).change(() => { checkDate(event, i, "act") })
-                })
+                $("[id*='planSt_']").each((i) => { $(`#planSt_${i}`).change(() => { checkDate(event, i, "plan") }) })
+                $("[id*='planEd_']").each((i) => { $(`#planEd_${i}`).change(() => { checkDate(event, i, "plan") }) })
+                $("[id*='actSt_']").each((i) => { $(`#actSt_${i}`).change(() => { checkDate(event, i, "act") }) })
+                $("[id*='actEd_']").each((i) => { $(`#actEd_${i}`).change(() => { checkDate(event, i, "act") }) })
                 // 日付けがセットされているか確認し、予定、実績それぞれの開始/終了がセットされていれば差分を計算する
                 function checkDate(event, index, process) {
                     if ($(`#${process}St_${index}`).val() !== "" && $(`#${process}Ed_${index}`).val() !== "") setDiffDay(process, index)
