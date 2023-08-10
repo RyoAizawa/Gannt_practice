@@ -159,6 +159,7 @@ header {
 
 /* バー */
 .bar {
+    display: none;
     position: absolute;
     width: 30px;
 }
